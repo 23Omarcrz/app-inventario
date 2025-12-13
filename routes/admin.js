@@ -5,7 +5,9 @@ export const createAdminRouter = ({ adminModel }) => {
     const adminRouter = Router();
     const adminController = new AdminController({ adminModel });
 
-    adminRouter.get('/', adminController.getUsers)
+    // 1. Obtener TODOS los usuarios del admin
+    adminRouter.get('/:id_admin/usuarios', adminController.getUsers);
+    adminRouter.get('/:id_admin/usuario/:id_usuario', adminController.verifyUser);
 
     return adminRouter;
 }

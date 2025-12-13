@@ -1,7 +1,6 @@
 import { getConnection } from "./connection.js";
 import bcrypt from 'bcrypt';
 
-
 export class AuthModel {
     static async login({ input }) {
         const {username, password} = input;
@@ -15,28 +14,26 @@ export class AuthModel {
                 'SELECT * FROM Administrador WHERE username = ?;', [username]
             )
             if (rows.length === 0) {
-                //return res.status(401).json({ msg: "Usuario no encontrado" });
-                return { valid: false, message: "Usuario o contrasena incorrecta", admin: {} }  //este mensaje lo dejamos asi para no revelar 
-                                                                                    //que el usuario existe a un atacante, lo dejamos ambiguo
+                const err = new Error("Usuario o contrasena incorrecta")
+                err.code = "USER_NOT_FOUND"
+                throw err;
             }
             const admin = rows[0];//esto es porque rows es un arreglo con el objeto
-            const { id_admin, nombre, apellidos} = admin;
-            const usernameAdmin = admin.username;
             // Esto le dice a bcrypt:
             // "Compara la contraseña enviada con el hash guardado"
             const validPassword = await bcrypt.compare(password, admin.password);
 
             if (!validPassword) {
-                //return res.status(401).json({ msg: "Contraseña incorrecta" });
-                return { valid: false, message: "Usuario o contrasena incorrecta", admin: {} }  //igual aqui lo dejamos ambiguo
+                const err = new Error("Usuario o contrasena incorrecta");
+                err.code = "INVALID_PASSWORD";
+                throw err;
             }
 
+            const { id_admin, nombre, apellidos } = admin;
             //res.status(200).json({ msg: "Login exitoso", usuario });
-            return { valid: true, message: "Login exitoso", admin:{id_admin, nombre, apellidos, usernameAdmin} }
-
+            return {id_admin, nombre, apellidos, username}
         } catch (error) {
-            console.error(error);//esto no llega al usuario
-            return { valid: false, message: 'Ocurrió un error interno, intenta más tarde' };
+            throw error;
         } finally {
             if (connection) connection.release(); // liberamos la conexión al pool
         }
@@ -66,17 +63,10 @@ export class AuthModel {
                 [nombre, apellidos, email, username, hash]
             );
 
-            return { success: true, message: 'Administrador registrado' };
+            return { success: true };
 
         } catch (error) {
-            // Si es un error de duplicado (MySQL tiene error code 1062)
-            if (error.code === 'ER_DUP_ENTRY') {
-                return { success: false, message: 'El administrador o correo ya existe' };
-            }
-
-            // Para otros errores, log interno y mensaje genérico
-            console.error(error);//esto no llega al usuario
-            return { success: false, message: 'Ocurrió un error interno, intenta más tarde' };
+            throw error;
         } finally {
             if (connection) connection.release();
         }
