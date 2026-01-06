@@ -8,15 +8,17 @@ export class AdminController {
         try {
             let { id_admin } = req.params;
             id_admin = Number(id_admin);
+
+            const token = req.cookies.token;
     
             const users = await this.adminModel.getUsers({ id_admin });
             return res.status(200).json({
                 success: true,
-                message: "usuarios encontrados",
+                message: "usuarios filtrados",
                 users
             });
         } catch (error) {
-            if(error.code){
+            /* if(error.code){
                 if (error.code === "USERS_NOT_FOUND"){
                     return res.status(404).json({
                         success: false,
@@ -24,7 +26,7 @@ export class AdminController {
                         message: "No se encontraron usuarios"
                     });
                 }
-            }
+            } */
 
             console.error(`[${new Date().toISOString()}]`, error);
             return res.status(500).json({ 

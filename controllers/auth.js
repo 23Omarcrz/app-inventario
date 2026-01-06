@@ -1,4 +1,6 @@
+import { validateLogin } from "../schemas/validLogin.js";
 import { validateRegister } from "../schemas/validRegister.js";
+import 'dotenv/config'
 
 export class AuthController {
     constructor({ authModel }) {
@@ -7,14 +9,46 @@ export class AuthController {
 
     login = async (req, res) => {
         //validamos con zod
+        const result = validateLogin(req.body);
+        if (result.error) {
+            // Parseamos el error de Zod
+            //console.log(result.error.message)
+            const parsedError = JSON.parse(result.error.message);
+
+            // Iteramos sobre los errores para agregar el valor ingresado por el usuario
+            const formattedErrors = parsedError.map((err) => {
+                // Obtenemos el valor que el usuario ingresó para el campo específico
+                const userValue = req.body[err.path[0]];  // `err.path[0]` es el campo que causó el error
+
+                // Modificamos el mensaje para incluir el valor ingresado
+                return {
+                    ...err,
+                    userValue: userValue  // Añadimos el valor ingresado por el usuario al error
+                };
+            });
+
+            // Imprimimos los errores con el valor ingresado para enviar al frontend
+            //console.log("Error que se enviará al front:", formattedErrors);
+
+            // Devolvemos los errores con el valor ingresado
+            return res.status(400).json({ error: formattedErrors });
+        }
         // enviamos los datos
         try {
-            const admin = await this.authModel.login({ input: req.body });
+            const admin = await this.authModel.login({ input: result.data });
+            const {token, ...adminData} = admin;
 
+            res.cookie('token', token, {
+                httpOnly: true,
+                //secure: false, // true en producción con HTTPS
+                secure: false,//process.env.NODE_ENV === 'production',
+                sameSite: 'lax',
+                maxAge: 60 * 60 * 1000
+            })
             return res.status(200).json({
                 success: true,
                 message: "Login exitoso",
-                admin
+                adminData
             });
         } catch (error) {
             if (error.code) {
@@ -32,6 +66,7 @@ export class AuthController {
         const result = validateRegister(req.body);
         if (result.error) {
             // Parseamos el error de Zod
+            //console.log(result.error.message)
             const parsedError = JSON.parse(result.error.message);
 
             // Iteramos sobre los errores para agregar el valor ingresado por el usuario

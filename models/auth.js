@@ -1,5 +1,7 @@
 import { getConnection } from "./connection.js";
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken'
+import 'dotenv/config'
 
 export class AuthModel {
     static async login({ input }) {
@@ -29,9 +31,15 @@ export class AuthModel {
                 throw err;
             }
 
+            const token = jwt.sign(
+                { id: admin.id_admin, username: username },          // payload (info del usuario)
+                process.env.JWT_SECRET,           // clave secreta
+                { expiresIn: process.env.JWT_EXPIRES_IN }               // tiempo de expiración
+            );
+
             const { id_admin, nombre, apellidos } = admin;
             //res.status(200).json({ msg: "Login exitoso", usuario });
-            return {id_admin, nombre, apellidos, username}
+            return {id_admin, nombre, apellidos, username, token}
         } catch (error) {
             throw error;
         } finally {
@@ -55,6 +63,7 @@ export class AuthModel {
             // 1. Generar hash
             const saltRounds = 10;
             const hash = await bcrypt.hash(password, saltRounds);
+            //const hash2 = bcrypt.hashSync(password, saltRounds);
 
             // 2. Insertar en la BD
             await connection.query(

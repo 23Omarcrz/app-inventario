@@ -9,11 +9,11 @@ export class AdminModel {
             const [users] = await connection.query(
                 'SELECT id_usuario, nombre, apellidos, area FROM Usuario WHERE id_admin = ?;', [id_admin] 
             ) 
-            if (users.length === 0) {
+            /* if (users.length === 0) {
                 const err = new Error("No se encontraron usuarios")
                 err.code = "USERS_NOT_FOUND"
                 throw err;
-            }
+            } */
             
             return users
         } catch (error) {
@@ -31,6 +31,7 @@ export class AdminModel {
             const [rows] = await connection.query(
                 'SELECT * FROM Usuario WHERE id_usuario = ? AND id_admin = ?;', [id_usuario, id_admin]
             );
+            
             if (rows.length === 0) {
                 const err = new Error("No se encontro al usuario")
                 err.code = "USER_NOT_FOUND"
