@@ -1,26 +1,6 @@
 import z from 'zod';
 
 const registerSchema = z.object({
-    // ✅ Campo: nombre
-    nombre: z
-        .string("El valor debe ser un texto")
-        .nonempty("El nombre es obligatorio")
-        .regex(/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/, "Solo se aceptan letras y espacios"),  // Validación para solo letras
-    apellidos: z
-        .string("El valor debe ser un texto")
-        .nonempty("Los Apellidos son obligatorios")
-        .regex(/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/, { message: "Solo se aceptan letras y espacios" }),  // Validación para solo letras
-    email: z
-        .string("El valor debe ser un texto")
-        .nonempty("El correo es obligatorio")
-        .email({ message: "El correo no es válido" }),
-    username: z
-        .string("El valor debe ser un texto")
-        .nonempty("El username es obligatorio")
-        .min(5, { message: "Debe tener mínimo 5 caracteres" })
-        .max(15, { message: "No debe superar 15 caracteres" })
-        .regex(/^[a-zA-Z0-9._-]+$/, { message: "Solo se aceptan letras, números, puntos, guiones y guion bajo" }),
-        
     password: z
         .string("El valor debe ser un texto")
         .nonempty("La contraseña es obligatoria")
@@ -32,14 +12,9 @@ const registerSchema = z.object({
         .regex(/[\W_]/, { message: "Se debe incluir al menos un símbolo" })
 });
 
-export function validateRegister(object) {
+export function validateResetPassword(object) {
     return registerSchema.safeParse(object);
 }
-
-export function validatePartialRegister(object) {
-    return registerSchema.partial().safeParse(object);
-}
-
 /*
     username: z.preprocess(
         val => val ?? "",  // undefined → string vacío

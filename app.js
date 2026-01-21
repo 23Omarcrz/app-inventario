@@ -28,6 +28,7 @@ export const createApp = ({authModel, adminModel, inventoryModel}) => {
     app.listen(PORT, () => {
         console.log(`Server listening on: http://localhost:${PORT}`);
     })
+
 }
 
 

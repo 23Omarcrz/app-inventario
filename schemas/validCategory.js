@@ -1,15 +1,14 @@
-import zod from 'zod';
+import z from 'zod';
 
-const categorySchema = zod.object({
-    id_usuario: zod.number({
-        invalid_type_error: 'id_usuario debe ser un numero',      // Si no es string, lanza este mensaje
-        required_error: 'id_usuario es obligatorio'
-    })     // Debe ser un número...
+const categorySchema = z.object({
+    id_usuario: z
+        .number('id_usuario debe ser un numero valido') 
         .int(),        // ...entero
-    nombre_categoria: zod.string({
-        invalid_type_error: 'el nombre de la categoria debe ser un string',
-        required_error: "el nombre de la categoria es obligatoria"
-    }).regex(/^[a-zA-Z0-9_-]+$/, { message: "Solo se permiten letras, números, guiones y guion bajo" }),
+
+    nombre_categoria: z
+        .string('el nombre de la categoria debe ser un string') 
+        .nonempty("el nombre de la categoria es obligatoria")
+        .regex(/^[a-zA-Z0-9_-]+$/, { message: "Solo se permiten letras, números, guiones y guion bajo" }),
 })
 
 export function validateCategory(object) {

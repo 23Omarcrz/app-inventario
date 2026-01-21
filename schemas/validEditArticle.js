@@ -1,10 +1,10 @@
 import z from 'zod';
 
-const articuloSchema = z.object({
+const articleSchema = z.object({
     no_inventario: z
         .string("Tipo de dato invalido se esperaba un texto")
         .trim()
-        .nonempty("El No. de inventario es obligatorio"),  //esto valida que no venga vacia la cadena o arreglo | "", [] no pasan
+        .optional(),  //esto valida que no venga vacia la cadena o arreglo | "", [] no pasan
 
     no_serie: z
         .string("Tipo de dato invalido se esperaba un texto")
@@ -19,7 +19,7 @@ const articuloSchema = z.object({
     descripcion: z
         .string("Tipo de dato invalido se esperaba un texto")
         .trim()
-        .nonempty("La descripcion es obligatoria"),
+        .optional(),
 
     fabricante: z
         .string("Tipo de dato invalido se esperaba un texto")
@@ -69,7 +69,7 @@ const articuloSchema = z.object({
     ubicacion: z
         .string("Tipo de dato invalido se esperaba un texto")
         .trim()
-        .nonempty("La ubicacion es obligatoria"),
+        .optional(),
     
     resguardatario: z
         .string("El valor debe ser un texto")
@@ -94,17 +94,9 @@ const articuloSchema = z.object({
         ),
     
     no_oficio_traspaso: z
-        .string( "El valor debe ser un texto")
+        .string("El valor debe ser un texto")
         .trim()
         .optional(),
-
-    id_categoria: z
-        .preprocess(
-            val => Number(val),
-            z
-                .number("Tipo de dato invalido se esperaba un numero")
-                .int()
-        ),
 
     estatus: z
         .string("El valor debe ser un texto")
@@ -112,24 +104,6 @@ const articuloSchema = z.object({
         .optional()
 });
 
-export function validateArticulosArray(array) {
-    const validRows = [];
-    const errors = [];
-
-    array.forEach((row, index) => {
-        const result = articuloSchema.safeParse(row);
-        if (result.success) {
-            validRows.push(result.data); // fila válida
-        } else {
-            errors.push({
-                row: index + 1, // número de fila
-                errors: result.error.issues.map(e => ({
-                    field: e.path[0],
-                    message: e.message
-                }))
-            });
-        }
-    });
-
-    return { data: validRows, errors };
+export function validateEditArticle(object) {
+    return articleSchema.safeParse(object);
 }

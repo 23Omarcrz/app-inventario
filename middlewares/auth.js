@@ -1,12 +1,14 @@
 import jwt from 'jsonwebtoken';
 
 export const authMiddleware = (req, res, next) => {
-    const token = req.cookies.token;
-    console.log("autenticacion impresion de token")
-    console.log(token)
+    const token = req.cookies.access_token;
 
     if (!token) {
-        return res.status(401).json({ message: 'No autenticado' });
+        return res.status(401).json({
+            success: false,
+            code: "NO_TOKEN",
+            message: "No autenticado"
+        });
     }
 
     try {
@@ -14,10 +16,15 @@ export const authMiddleware = (req, res, next) => {
 
         // Esto le dice a Express:
         // "Guarda la info del usuario autenticado en la request"
-        req.user = decoded;
+        //req.user = decoded;
+        req.session = decoded;
 
         next();
     } catch (err) {
-        return res.status(401).json({ message: 'Token inválido' });
+        return res.status(401).json({
+            success: false,
+            code: "INVALID_TOKEN",
+            message: "Token inválido"
+        });
     }
 };
