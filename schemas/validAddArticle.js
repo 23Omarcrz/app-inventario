@@ -19,7 +19,7 @@ const articleSchema = z.object({
     descripcion: z
         .string("Tipo de dato invalido se esperaba un texto")
         .trim()
-        .nonempty("La descripcion es obligatoria"),
+        .nonempty("La descripción es obligatoria"),
 
     fabricante: z
         .string("Tipo de dato invalido se esperaba un texto")
@@ -37,7 +37,7 @@ const articleSchema = z.object({
             z
                 .number("Tipo de dato invalido se esperaba un numero")
                 .nonnegative("El valor no puede ser negativo")
-                .max(999_999_999, "El valor excede el límite de Digitos")
+                .max(999_999_999, "El valor excede el límite de Dígitos")
                 .multipleOf(0.01, "El valor puede tener máximo 2 decimales")
                 .optional()//.nullable(),//permite null
         ),
@@ -69,7 +69,7 @@ const articleSchema = z.object({
     ubicacion: z
         .string("Tipo de dato invalido se esperaba un texto")
         .trim()
-        .nonempty("La ubicacion es obligatoria"),
+        .nonempty("La ubicación es obligatoria"),
     
     resguardatario: z
         .string("El valor debe ser un texto")

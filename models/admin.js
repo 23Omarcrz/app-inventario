@@ -5,7 +5,7 @@ export class AdminModel {
         let connection;
 
         if (!Number.isInteger(id_admin)) {
-            const err = new Error("id_admin invalido")
+            const err = new Error("id_admin no válido")
             err.code = "INVALID_ADMIN_ID"
             throw err;
         }
@@ -15,11 +15,6 @@ export class AdminModel {
             const [users] = await connection.query(
                 'SELECT id_usuario, nombre, apellidos, area FROM Usuario WHERE id_admin = ?;', [id_admin] 
             ) 
-            /* if (users.length === 0) {
-                const err = new Error("No se encontraron usuarios")
-                err.code = "USERS_NOT_FOUND"
-                throw err;
-            } */
             
             return users
         } catch (error) {
@@ -33,13 +28,13 @@ export class AdminModel {
         let connection;
 
         if (!Number.isInteger(id_admin)) {
-            const err = new Error("id_admin invalido")
+            const err = new Error("id_admin no válido")
             err.code = "INVALID_ADMIN_ID"
             throw err;
         }
 
         if (!Number.isInteger(Number(id_usuario))) {
-            const err = new Error("id_usuario invalido");
+            const err = new Error("id_usuario no válido");
             err.code = "INVALID_USER_ID";
             throw err;
         }
@@ -51,7 +46,7 @@ export class AdminModel {
             );
             
             if (rows.length === 0) {
-                const err = new Error("No se encontro al usuario")
+                const err = new Error("No se encontró al usuario")
                 err.code = "USER_NOT_FOUND"
                 throw err;
             }
@@ -66,12 +61,11 @@ export class AdminModel {
         let connection;
 
         if (!Number.isInteger(input.id_admin)) {
-            const err = new Error("id_admin inválido");
+            const err = new Error("id_admin no válido");
             err.code = "INVALID_ADMIN_ID";
             throw err;
         }
 
-        
         try {
             connection = await getConnection();
 
@@ -83,10 +77,17 @@ export class AdminModel {
             const placeholders = fields.map(() => "?").join(", "); // "?, ?, ?"
 
             // Ejecutamos
-            await connection.query(
+            const [result] = await connection.query(
                 `INSERT INTO Usuario (${fields.join(", ")}) VALUES (${placeholders});`, values);
+            
+            const newUserId = result.insertId
 
-            return true
+            const [rows] = await connection.query(
+                "SELECT * FROM Usuario WHERE id_usuario = ?",
+                [newUserId]
+            );
+
+            return rows[0];
         } catch (error) {
             throw error;
         } finally {
@@ -98,7 +99,7 @@ export class AdminModel {
         let connection;
 
         if (!Number.isInteger(id_admin)) {
-            const err = new Error("id_admin inválido");
+            const err = new Error("id_admin no válido");
             err.code = "INVALID_ADMIN_ID";
             throw err;
         }
@@ -117,7 +118,7 @@ export class AdminModel {
             );
 
             if (users.length !== idUsuarios.length) {
-                const err = new Error("Usuarios inválidos o no pertenecen al administrador");
+                const err = new Error("Usuarios no válidos o no pertenecen al administrador");
                 err.code = "INVALID_USERS";
                 throw err;
             }

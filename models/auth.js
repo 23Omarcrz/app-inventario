@@ -16,7 +16,7 @@ export class AuthModel {
                 'SELECT * FROM Administrador WHERE username = ?;', [username]
             )
             if (rows.length === 0) {
-                const err = new Error("Usuario o contrasena incorrecta")
+                const err = new Error("Usuario o contraseña incorrecta")
                 err.code = "USER_NOT_FOUND"
                 throw err;
             }
@@ -32,7 +32,7 @@ export class AuthModel {
             const validPassword = await bcrypt.compare(password, admin.password);
 
             if (!validPassword) {
-                const err = new Error("Usuario o contrasena incorrecta");
+                const err = new Error("Usuario o contraseña incorrecta");
                 err.code = "INVALID_PASSWORD";
                 throw err;
             }

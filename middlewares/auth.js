@@ -24,7 +24,7 @@ export const authMiddleware = (req, res, next) => {
         return res.status(401).json({
             success: false,
             code: "INVALID_TOKEN",
-            message: "Token inválido"
+            message: "Token no válido"
         });
     }
 };

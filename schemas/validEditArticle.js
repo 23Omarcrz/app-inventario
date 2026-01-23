@@ -4,7 +4,7 @@ const articleSchema = z.object({
     no_inventario: z
         .string("Tipo de dato invalido se esperaba un texto")
         .trim()
-        .optional(),  //esto valida que no venga vacia la cadena o arreglo | "", [] no pasan
+        .optional(),  //esto valida que no venga vacía la cadena o arreglo | "", [] no pasan
 
     no_serie: z
         .string("Tipo de dato invalido se esperaba un texto")
@@ -37,7 +37,7 @@ const articleSchema = z.object({
             z
                 .number("Tipo de dato invalido se esperaba un numero")
                 .nonnegative("El valor no puede ser negativo")
-                .max(999_999_999, "El valor excede el límite de Digitos")
+                .max(999_999_999, "El valor excede el límite de Dígitos")
                 .multipleOf(0.01, "El valor puede tener máximo 2 decimales")
                 .optional()//.nullable(),//permite null
         ),

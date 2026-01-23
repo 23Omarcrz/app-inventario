@@ -5,13 +5,13 @@ export class InventoryModel {
         let connection;
 
         if (!Number.isInteger(Number(id_usuario))) {
-            const err = new Error("id_usuario inválido");
+            const err = new Error("id_usuario no válido");
             err.code = "INVALID_USER_ID";
             throw err;
         }
 
         if (!Number.isInteger(id_admin)) {
-            const err = new Error("id_admin inválido");
+            const err = new Error("id_admin no válido");
             err.code = "INVALID_ADMIN_ID";
             throw err;
         }
@@ -50,19 +50,19 @@ export class InventoryModel {
         let connection;
 
         if (!Number.isInteger(id_admin)) {
-            const err = new Error("id_admin inválido");
+            const err = new Error("id_admin no válido");
             err.code = "INVALID_ADMIN_ID";
             throw err;
         }
 
         if (!Number.isInteger(Number(id_usuario))) {
-            const err = new Error("id_usuario inválido");
+            const err = new Error("id_usuario no válido");
             err.code = "INVALID_USER_ID";
             throw err;
         }
 
         if (!Number.isInteger(Number(id_categoria))) {
-            const err = new Error("id_categoria inválido");
+            const err = new Error("id_categoria no válida");
             err.code = "INVALID_CATEGORY_ID";
             throw err;
         }
@@ -192,11 +192,10 @@ export class InventoryModel {
         const userId = Number(id_usuario);
 
         if (!Number.isInteger(userId) || userId <= 0) {
-            const err = new Error("id_usuario inválido");
+            const err = new Error("id_usuario no válido");
             err.code = "INVALID_USER_ID";
             throw err;
         }
-
 
         try {
             connection = await getConnection();
@@ -307,7 +306,7 @@ export class InventoryModel {
         const categoriaId = Number(input.id_categoria);
 
         if (!Number.isInteger(categoriaId) || categoriaId <= 0) {
-            const err = new Error("Categoría inválida");
+            const err = new Error("Categoría no válida");
             err.code = "INVALID_CATEGORY_ID";
             throw err;
         }
@@ -376,12 +375,12 @@ export class InventoryModel {
             connection = await getConnection();
             const id_articulo = input.id_articulo
             const [articulo] = await connection.query(
-                'SELECT id_articulo FROM Articulo WHERE id_articulo = ?',
+                'SELECT id_articulo FROM Artículo WHERE id_articulo = ?',
                 [id_articulo]
             );
 
             if(articulo.length === 0) {
-                const err = new Error(`Articulo no encontrado`)
+                const err = new Error(`Artículo no encontrado`)
                 err.code = "ARTICLE_NOT_FOUND"
                 throw err;
             }
@@ -450,7 +449,7 @@ export class InventoryModel {
             )
         
             if (result.affectedRows === 0) {
-                const err = new Error(`Articulo no encontrado`)
+                const err = new Error(`Artículo no encontrado`)
                 err.code = "ARTICLE_NOT_FOUND"
                 throw err;
             }
@@ -469,10 +468,18 @@ export class InventoryModel {
         let connection;
         try {
             connection = await getConnection();
-            await connection.query(
+            const [result] = await connection.query(
                 `INSERT INTO Categoria (nombre, id_usuario)
              VALUES (?, ?);`, [nombre_categoria, id_usuario]
             );
+
+            const newCategoryId = result.insertId;
+            
+            const [categoria] = await connection.query(
+                'SELECT * FROM Categoria WHERE id_categoria = ?;', [newCategoryId]
+            );
+
+            return categoria[0];
         } catch (error) {
             throw error
         } finally {

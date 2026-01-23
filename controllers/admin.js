@@ -21,7 +21,7 @@ export class AdminController {
                     return res.status(400).json({
                         success: false,
                         code: "INVALID_ADMIN_ID",
-                        message: "id_admin invalido"
+                        message: "id_admin no válido"
                     });
                 }
             }
@@ -29,7 +29,7 @@ export class AdminController {
             return res.status(500).json({ 
                 success: false,
                 code: "INTERNAL_SERVER_ERROR",
-                message: "Ocurrió un error interno, intenta más tarde" 
+                message: "Error interno del servidor, intenta más tarde" 
             });
         }
     } 
@@ -51,7 +51,7 @@ export class AdminController {
                     return res.status(400).json({
                         success: false,
                         code: "INVALID_ADMIN_ID",
-                        message: "id_admin invalido"
+                        message: "Administrador no válido"
                     });
                 }
 
@@ -59,7 +59,7 @@ export class AdminController {
                     return res.status(400).json({
                         success: false,
                         code: "INVALID_USER_ID",
-                        message: "id_usuario inválido"
+                        message: "Usuario no válido"
                     });
                 }
 
@@ -74,7 +74,7 @@ export class AdminController {
             }
 
             console.error(`[${new Date().toISOString()}]`, error);
-            return res.status(500).json({ success: false, code: "INTERNAL_SERVER_ERROR", message: "Ocurrió un error interno, intenta más tarde" });
+            return res.status(500).json({ success: false, code: "INTERNAL_SERVER_ERROR", message: "Error interno del servidor, intenta más tarde" });
         }
     }
 
@@ -99,10 +99,11 @@ export class AdminController {
             const datos = Object.fromEntries(
                 Object.entries(result.data).filter(([_, value]) => value !== "" && value !== undefined)
             );
-            await this.adminModel.addUser({input: {...datos, id_admin}});
+            const user = await this.adminModel.addUser({input: {...datos, id_admin}});
             return res.status(201).json({
                 success: true,
                 message: "usuario registrado",
+                newUser: user
             });
         } catch (error) {
             if (error.code) {
@@ -113,14 +114,14 @@ export class AdminController {
                     return res.status(400).json({
                         success: false,
                         code: "INVALID_ADMIN_REFERENCE",
-                        message: "Administrador inválido"
+                        message: "Administrador no válido"
                     });
                 }
 
             }
 
             console.error(`[${new Date().toISOString()}]`, error);
-            return res.status(500).json({ success: false, code: "INTERNAL_SERVER_ERROR", message: 'Ocurrió un error interno, intenta más tarde :(' });
+            return res.status(500).json({ success: false, code: "INTERNAL_SERVER_ERROR", message: 'Error interno del servidor, intenta más tarde' });
         }
     }
 
@@ -141,7 +142,8 @@ export class AdminController {
 
             return res.status(200).json({
                 success: true,
-                message: "Usuarios eliminados correctamente"
+                message: "Usuarios eliminados correctamente",
+                deletedUsers: usuarios // ← array de IDs
             });
 
         } catch (error) {
@@ -177,7 +179,7 @@ export class AdminController {
             return res.status(500).json({
                 success: false,
                 code: "INTERNAL_SERVER_ERROR",
-                message: "Ocurrió un error interno, intenta más tarde"
+                message: "Error interno del servidor, intenta más tarde"
             });
         }
     }

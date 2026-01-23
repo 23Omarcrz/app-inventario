@@ -17,7 +17,7 @@ export class InventoryController {
 
             return res.status(200).json({
                 success: true,
-                message: "categorias filtradas",
+                message: "categorías filtradas",
                 categorias
             });
         } catch (error) {
@@ -25,7 +25,7 @@ export class InventoryController {
                 return res.status(400).json({
                     success: false,
                     code: "INVALID_ADMIN_ID",
-                    message: "Administrador inválido"
+                    message: "Administrador no válido"
                 });
             }
 
@@ -33,7 +33,7 @@ export class InventoryController {
                 return res.status(400).json({
                     success: false,
                     code: "INVALID_USER_ID",
-                    message: "Usuario inválido"
+                    message: "Usuario no válido"
                 });
             }
 
@@ -46,7 +46,7 @@ export class InventoryController {
             }
 
             console.error(`[${new Date().toISOString()}]`, error);
-            return res.status(500).json({ success: false, code: "INTERNAL_SERVER_ERROR", message: "Ocurrió un error interno, intenta más tarde" });
+            return res.status(500).json({ success: false, code: "INTERNAL_SERVER_ERROR", message: "Error interno del servidor, intenta más tarde" });
         }
         
     }
@@ -70,7 +70,7 @@ export class InventoryController {
             return res.status(400).json({
                 success: false,
                 code: "INVALID_PAGE",
-                message: "Número de página inválido"
+                message: "Número de página no válido"
             });
         }
 
@@ -78,7 +78,7 @@ export class InventoryController {
             return res.status(400).json({
                 success: false,
                 code: "INVALID_LIMIT",
-                message: "Límite inválido"
+                message: "Límite no válido"
             });
         }
 
@@ -120,7 +120,7 @@ export class InventoryController {
                     return res.status(400).json({
                         success: false,
                         code: "INVALID_USER_ID",
-                        message: "Usuario inválido"
+                        message: "Usuario no válido"
                     });
                 }
 
@@ -128,7 +128,7 @@ export class InventoryController {
                     return res.status(400).json({
                         success: false,
                         code: "INVALID_CATEGORY_ID",
-                        message: "Categoría inválida"
+                        message: "Categoría no válida"
                     });
                 }
 
@@ -150,7 +150,7 @@ export class InventoryController {
             }
 
             console.error(`[${new Date().toISOString()}]`, error);
-            return res.status(500).json({ success: false, code: "INTERNAL_SERVER_ERROR", message: "Ocurrió un error interno, intenta más tarde" });
+            return res.status(500).json({ success: false, code: "INTERNAL_SERVER_ERROR", message: "Error interno del servidor, intenta más tarde" });
         }
     }
 
@@ -172,7 +172,7 @@ export class InventoryController {
             return res.status(400).json({
                 success: false,
                 code: "INVALID_PAGE",
-                message: "Número de página inválido"
+                message: "Número de página no válido"
             });
         }
 
@@ -180,7 +180,7 @@ export class InventoryController {
             return res.status(400).json({
                 success: false,
                 code: "INVALID_LIMIT",
-                message: "Límite inválido"
+                message: "Límite no válido"
             });
         }
 
@@ -200,7 +200,7 @@ export class InventoryController {
             // 🔹 RESPUESTA AL FRONT
             return res.status(200).json({
                 success: true,
-                message: "Articulos encontrados",
+                message: "Artículos encontrados",
                 items: result.items,
                 totalItems: result.totalItems,
                 totalPages: result.totalPages,
@@ -213,7 +213,7 @@ export class InventoryController {
                 return res.status(400).json({
                     success: false,
                     code: "INVALID_USER_ID",
-                    message: "Usuario inválido"
+                    message: "Usuario no válido"
                 });
             }
 
@@ -226,7 +226,7 @@ export class InventoryController {
             }
 
             console.error(`[${new Date().toISOString()}]`, error);
-            return res.status(500).json({ success: false, code: "INTERNAL_SERVER_ERROR", message: "Ocurrió un error interno, intenta más tarde" });
+            return res.status(500).json({ success: false, code: "INTERNAL_SERVER_ERROR", message: "Error interno del servidor, intenta más tarde" });
         }
     }
     
@@ -258,9 +258,9 @@ export class InventoryController {
         
         try {
             const crear = await this.inventoryModel.insertArticulo({input: datos});
-            return res.status(200).json({
+            return res.status(201).json({
                 success: crear,
-                message: "Articulo agregado"
+                message: "Artículo agregado"
             })
         } catch (error) {
             if(error.code){
@@ -321,7 +321,7 @@ export class InventoryController {
                 }
             }
             console.error(`[${new Date().toISOString()}]`, error);
-            return res.status(500).json({ success: false, code: "INTERNAL_SERVER_ERROR", message: "Ocurrió un error interno, intenta más tarde" });
+            return res.status(500).json({ success: false, code: "INTERNAL_SERVER_ERROR", message: "Error interno del servidor, intenta más tarde" });
         }
     }
 
@@ -369,7 +369,7 @@ export class InventoryController {
 
         try {
             const actualizar = await this.inventoryModel.updateArticle({ input: datos });
-            return res.status(200).json({
+            return res.status(204).json({
                 success: true,
                 message: "Datos actualizados"
             })
@@ -419,7 +419,7 @@ export class InventoryController {
                 }
             }
             console.error(`[${new Date().toISOString()}]`, error);
-            return res.status(500).json({ success: false, code: "INTERNAL_SERVER_ERROR", message: "Ocurrió un error interno, intenta más tarde" });
+            return res.status(500).json({ success: false, code: "INTERNAL_SERVER_ERROR", message: "Error interno del servidor, intenta más tarde" });
         }
     }
 
@@ -438,7 +438,7 @@ export class InventoryController {
         try {
             const result = await this.inventoryModel.deleteArticulo({ id_articulo });
 
-            return res.status(200).json({
+            return res.status(204).json({
                 success: result,
                 message: 'Artículo eliminado'
             })
@@ -457,7 +457,7 @@ export class InventoryController {
             }
 
             console.error(`[${new Date().toISOString()}]`, error);
-            return res.status(500).json({ success: false, code: "INTERNAL_SERVER_ERROR", message: "Ocurrió un error interno, intenta más tarde" });
+            return res.status(500).json({ success: false, code: "INTERNAL_SERVER_ERROR", message: "Error interno del servidor, intenta más tarde" });
         }
     }
 
@@ -489,10 +489,11 @@ export class InventoryController {
         }
 
         try {
-            await this.inventoryModel.createCategoria({input: result.data});
+            const category = await this.inventoryModel.createCategoria({input: result.data});
             return res.status(201).json({
                 success: true,
                 message: "Categoría agregada",
+                newCategory: category
             });
         } catch (error) {
             if (error.code) {
@@ -501,7 +502,7 @@ export class InventoryController {
                 }
             }
             console.error(`[${new Date().toISOString()}]`, error);
-            return res.status(500).json({ success: false, code: "INTERNAL_SERVER_ERROR", message: 'Ocurrió un error interno, intenta más tarde' });
+            return res.status(500).json({ success: false, code: "INTERNAL_SERVER_ERROR", message: 'Error interno del servidor, intenta más tarde' });
         }
     }
 
@@ -524,7 +525,7 @@ export class InventoryController {
         const datos = cleanedArray(result.data)
         try {
             const importar = await this.inventoryModel.fileImport({input: datos});
-            return res.status(200).json({
+            return res.status(201).json({
                 success: true,
                 message: "Archivo importado correctamente"
             })
@@ -540,7 +541,7 @@ export class InventoryController {
             }
 
             console.error(`[${new Date().toISOString()}]`, error);
-            return res.status(500).json({ success: false, code: "INTERNAL_SERVER_ERROR", message: "Ocurrió un error interno, intenta más tarde" });
+            return res.status(500).json({ success: false, code: "INTERNAL_SERVER_ERROR", message: "Error interno del servidor, intenta más tarde" });
         }
     }
 
@@ -559,7 +560,8 @@ export class InventoryController {
 
             return res.status(200).json({
                 success: true,
-                message: 'Categoría eliminada'
+                message: 'Categoría eliminada',
+                deletedCategory: id_categoria
             })
         } catch (error) {
             if (error.code) {
@@ -569,7 +571,7 @@ export class InventoryController {
             }
 
             console.error(`[${new Date().toISOString()}]`, error);
-            return res.status(500).json({ success: false, code: "INTERNAL_SERVER_ERROR", message: "Ocurrió un error interno, intenta más tarde" });
+            return res.status(500).json({ success: false, code: "INTERNAL_SERVER_ERROR", message: "Error interno del servidor, intenta más tarde" });
         }
     }
 
@@ -624,7 +626,7 @@ export class InventoryController {
             }
 
             console.error(`[${new Date().toISOString()}]`, error);
-            return res.status(500).json({ success: false, code: "INTERNAL_SERVER_ERROR", message: "Ocurrió un error interno, intenta más tarde" });
+            return res.status(500).json({ success: false, code: "INTERNAL_SERVER_ERROR", message: "Error interno del servidor, intenta más tarde" });
         }
     }
 }

@@ -13,6 +13,6 @@ export const generateRefreshToken = (payload) => {
     return jwt.sign(
         payload,
         process.env.JWT_REFRESH_SECRET,
-        { expiresIn: '7d' }
+        { expiresIn: '3d' }
     );
 };

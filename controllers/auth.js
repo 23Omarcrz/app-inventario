@@ -69,7 +69,7 @@ export class AuthController {
             }
 
             console.error(`[${new Date().toISOString()}]`, error);
-            return res.status(500).json({ success: false, code: "INTERNAL_SERVER_ERROR", message: 'Ocurrió un error interno, intenta más tarde :(' });
+            return res.status(500).json({ success: false, code: "INTERNAL_SERVER_ERROR", message: 'Error interno del servidor, intenta más tarde' });
         }   
     }
 
@@ -123,7 +123,7 @@ export class AuthController {
             }
 
             console.error(`[${new Date().toISOString()}]`, error);
-            return res.status(500).json({ success: false, code: "INTERNAL_SERVER_ERROR", message: 'Ocurrió un error interno, intenta más tarde' });
+            return res.status(500).json({ success: false, code: "INTERNAL_SERVER_ERROR", message: 'Error interno del servidor, intenta más tarde' });
         }
     }
 
@@ -134,12 +134,12 @@ export class AuthController {
         } catch (error) {
             if (error.code) {
                 if (error.code === "ADMIN_NOT_FOUND") {
-                    return res.status(401).json({ success: false, code: "INVALID_SESSION", message: "Sesión inválida" });
+                    return res.status(401).json({ success: false, code: "INVALID_SESSION", message: "Sesión no válida" });
                 }
             }
 
             console.error(`[${new Date().toISOString()}]`, error);
-            return res.status(500).json({ success: false, code: "INTERNAL_SERVER_ERROR", message: 'Ocurrió un error interno, intenta más tarde :(' });
+            return res.status(500).json({ success: false, code: "INTERNAL_SERVER_ERROR", message: 'Error interno del servidor, intenta más tarde' });
         }
     }
 
@@ -150,7 +150,7 @@ export class AuthController {
         .status(200)
         .json({
             success: true,
-            message: 'Logout successful'
+            message: 'Sesión cerrada'
         });
     }
 
@@ -162,7 +162,7 @@ export class AuthController {
             return res.status(401).json({ 
                 success: false,
                 code: "NO_REFRESH_TOKEN",
-                message: 'No utenticado'
+                message: 'No autenticado'
             });
         }
 
@@ -210,7 +210,7 @@ export class AuthController {
             // ⚠️ IMPORTANTE: responder igual aunque no exista
             if (!admin) {
                 return res.status(200).json({
-                    message: "Se enviaron instrucciones a su correo electronico"
+                    message: "Se enviaron instrucciones a su correo electrónico"
                 });
             }
 
@@ -229,12 +229,12 @@ export class AuthController {
 
             // 5️⃣ RESPUESTA (correo lo vemos después)
             return res.status(200).json({
-                message: "Se enviaron instrucciones a su correo electronico"
+                message: "Se enviaron instrucciones a su correo electrónico"
             });
 
         } catch (error) {
             console.error(`[${new Date().toISOString()}]`, error);
-            return res.status(500).json({ success: false, code: "INTERNAL_SERVER_ERROR", message: 'Ocurrió un error interno, intenta más tarde :(' });
+            return res.status(500).json({ success: false, code: "INTERNAL_SERVER_ERROR", message: 'Error interno del servidor, intenta más tarde' });
         }
     }
 
@@ -255,7 +255,7 @@ export class AuthController {
                 return res.status(400).json({
                     success: false,
                     code: "NO_VALID_TOKEN",
-                    message: "Solicitud inválida o expirada"
+                    message: "Solicitud no válida o expirada"
                 });
             }
 
@@ -280,21 +280,21 @@ export class AuthController {
                 });
             }
 
-            // 2️⃣ Hashear nueva contraseña
+            // Hashear nueva contraseña
             const saltRounds = 10;
             const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-            // 3️⃣ Guardar contraseña y limpiar token
+            // Guardar contraseña y limpiar token
             await this.authModel.updatePassword(admin.id_admin, hashedPassword);
 
             return res.status(200).json({
-                succes: true,
+                success: true,
                 message: "Contraseña actualizada correctamente"
             });
 
         } catch (error) {
             console.error(`[${new Date().toISOString()}]`, error);
-            return res.status(500).json({ success: false, code: "INTERNAL_SERVER_ERROR", message: 'Ocurrió un error interno, intenta más tarde :(' });
+            return res.status(500).json({ success: false, code: "INTERNAL_SERVER_ERROR", message: 'Error interno del servidor, intenta más tarde' });
         }
     }
 
