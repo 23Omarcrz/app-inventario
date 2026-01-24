@@ -4,7 +4,8 @@ const ACEPTED_ORIGINS = [
     'http://localhost:5173',
     'http://172.16.78.32:5173',
     'http://172.21.48.1:5173',
-    'http://192.168.3.61'
+    'http://192.168.3.61',
+    'http://192.168.3.69'
 ]
 
     /* const origin = req.header('origin') 
