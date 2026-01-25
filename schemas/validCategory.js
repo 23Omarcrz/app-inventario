@@ -7,6 +7,7 @@ const categorySchema = z.object({
 
     nombre_categoria: z
         .string('el nombre de la categoría debe ser un string') 
+        .trim()
         .nonempty("el nombre de la categoría es obligatoria")
         .regex(/^[a-zA-Z0-9_-]+$/, { message: "Solo se permiten letras, números, guiones y guion bajo" }),
 })
