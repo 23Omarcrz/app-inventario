@@ -344,7 +344,7 @@ export class InventoryModel {
                 } else {
                     // Opcional: lanzar error si el estatus no existe
                     const err = new Error(`Estatus "${input.estatus}" no encontrado`)
-                    err.code = "ESTATUS_NOT_FOUND"
+                    err.code = "STATUS_NOT_FOUND"
                     throw err;
                 }
             }
@@ -375,7 +375,7 @@ export class InventoryModel {
             connection = await getConnection();
             const id_articulo = input.id_articulo
             const [articulo] = await connection.query(
-                'SELECT id_articulo FROM Artículo WHERE id_articulo = ?',
+                'SELECT id_articulo FROM Articulo WHERE id_articulo = ?',
                 [id_articulo]
             );
 
@@ -403,7 +403,7 @@ export class InventoryModel {
                 } else {
                     // Opcional: lanzar error si el estatus no existe
                     const err = new Error(`Estatus "${input.estatus}" no encontrado`)
-                    err.code = "ESTATUS_NOT_FOUND"
+                    err.code = "STATUS_NOT_FOUND"
                     throw err;
                 }
             }
