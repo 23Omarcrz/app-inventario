@@ -309,7 +309,7 @@ export class InventoryController {
                         });
                     }
                 }
-                if (error.code === "ESTATUS_NOT_FOUND") {
+                if (error.code === "STATUS_NOT_FOUND") {
                     return res.status(404).json({ 
                         success: false, 
                         code: "STATUS_NOT_FOUND", 
