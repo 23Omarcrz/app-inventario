@@ -8,6 +8,7 @@ const articuloSchema = z.object({
 
     no_serie: z
         .string("Tipo de dato invalido se esperaba un texto")
+        .trim()
         .optional(),//acepta undefined sin lanzar error es decir el campo puede no existir
     // aqui no tiene caso definir required_error: "", pues si .optional() permite undefined, ese mensaje nunca se mostrar
 
@@ -32,15 +33,12 @@ const articuloSchema = z.object({
         .optional(),
     
     valor: z
-        .preprocess(
-            val => (val === "" || val == null ? undefined : Number(val)),
-            z
-                .number("Tipo de dato invalido se esperaba un numero")
-                .nonnegative("El valor no puede ser negativo")
-                .max(999_999_999, "El valor excede el límite de Dígitos")
-                .multipleOf(0.01, "El valor puede tener máximo 2 decimales")
-                .optional()//.nullable(),//permite null
-        ),
+        .number("Tipo de dato invalido se esperaba un numero")
+        .nonnegative("El valor no puede ser negativo")
+        .max(999_999_999, "El valor excede el límite de Dígitos")
+        .multipleOf(0.01, "El valor puede tener máximo 2 decimales")
+        .optional()
+        .nullable(),//permite null
 
     fecha_adquisicion: z
         .preprocess(
@@ -122,7 +120,7 @@ export function validateArticulosArray(array) {
             validRows.push(result.data); // fila válida
         } else {
             errors.push({
-                row: index + 1, // número de fila
+                row: index + 2, // número de fila
                 errors: result.error.issues.map(e => ({
                     field: e.path[0],
                     message: e.message

@@ -3,6 +3,7 @@ import z from 'zod';
 const registerSchema = z.object({
     password: z
         .string("El valor debe ser un texto")
+        .trim()
         .nonempty("La contraseña es obligatoria")
         .min(8, { message: "Debe incluir mínimo 8 caracteres"})
         .max(100, { message: "No debe superar 100 caracteres" })

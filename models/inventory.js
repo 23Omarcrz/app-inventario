@@ -556,7 +556,7 @@ export class InventoryModel {
                 .map((item, index) => {
                     if (duplicadosSet.has(item.no_inventario)) {
                         return {
-                            row: index,          // número de fila
+                            row: index + 2,          // número de fila
                             no_inventario: item.no_inventario
                         };
                     }

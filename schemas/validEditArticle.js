@@ -8,6 +8,7 @@ const articleSchema = z.object({
 
     no_serie: z
         .string("Tipo de dato invalido se esperaba un texto")
+        .trim()
         .optional(),//acepta undefined sin lanzar error es decir el campo puede no existir
     // aqui no tiene caso definir required_error: "", pues si .optional() permite undefined, ese mensaje nunca se mostrar
 

@@ -507,7 +507,7 @@ export class InventoryController {
     }
 
     fileImport = async (req, res) => {
-        //console.log(req.body);
+        
         const result = validateArticulosArray(req.body);
 
         if(result.errors.length > 0){

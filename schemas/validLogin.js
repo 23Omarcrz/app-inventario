@@ -4,11 +4,13 @@ const loginSchema = z.object({
     username: z.string({
         invalid_type_error: "El valor debe ser un texto",
     })
+        .trim()
         .nonempty("El username es obligatorio"),
 
     password: z.string({
         invalid_type_error: "El valor debe ser un texto",
     })
+        .trim()
         .nonempty("La contraseña es obligatoria")
 })
 
