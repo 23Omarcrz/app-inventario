@@ -3,7 +3,8 @@ import cors from 'cors';
 const ACEPTED_ORIGINS = [
     'http://localhost:5173',
     'http://172.16.78.32:5173',
-    'http://192.168.0.131'
+    'http://192.168.0.131',
+    'http://172.16.13.216'
 ]
 
     /* const origin = req.header('origin') 
