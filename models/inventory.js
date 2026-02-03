@@ -116,10 +116,12 @@ export class InventoryModel {
                     AND (
                         a.no_inventario LIKE ?
                         OR a.no_serie LIKE ?
+                        OR a.marca LIKE ?
                     )
                 `;
                 const likeSearch = `%${search}%`;
                 params.push(
+                    likeSearch,
                     likeSearch,
                     likeSearch
                 );
@@ -230,10 +232,11 @@ export class InventoryModel {
                 AND (
                     a.no_inventario LIKE ?
                     OR a.no_serie LIKE ?
+                    OR a.marca LIKE ?
                 )
             `;
                 const likeSearch = `%${search}%`;
-                params.push(likeSearch, likeSearch);
+                params.push(likeSearch, likeSearch, likeSearch);
             }
 
             // 1️⃣ CONTAR ARTÍCULOS
