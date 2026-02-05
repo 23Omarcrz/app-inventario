@@ -127,7 +127,7 @@ export class InventoryModel {
                 );
             }
 
-            // 1️⃣ CONTAR ARTÍCULOS
+            // CONTAR ARTÍCULOS
             const [[countResult]] = await connection.query(
                 `SELECT COUNT(*) AS total 
                 FROM Articulo a 
@@ -138,7 +138,7 @@ export class InventoryModel {
             const totalItems = countResult.total;
             const totalPages = Math.ceil(totalItems / safeLimit);
 
-            // 2️⃣ TRAER ARTÍCULOS PAGINADOS
+            // TRAER ARTÍCULOS PAGINADOS
             const [items] = await connection.query(
                 `
                 SELECT
@@ -172,7 +172,7 @@ export class InventoryModel {
                 [...params, safeLimit, offset]
             );
 
-            // 3️⃣ DEVOLVER TODO JUNTO
+            // DEVOLVER TODO JUNTO
             return {
                 items,
                 totalItems,
@@ -202,7 +202,7 @@ export class InventoryModel {
         try {
             connection = await getConnection();
 
-            // 🔒 Verificar pertenencia usuario-admin
+            // Verificar pertenencia usuario-admin
             const [user] = await connection.query(
                 `
                 SELECT id_usuario
@@ -226,7 +226,7 @@ export class InventoryModel {
 
             const params = [userId];
 
-            // 🔍 BÚSQUEDA
+            // BÚSQUEDA
             if (search) {
                 where += `
                 AND (
@@ -239,7 +239,7 @@ export class InventoryModel {
                 params.push(likeSearch, likeSearch, likeSearch);
             }
 
-            // 1️⃣ CONTAR ARTÍCULOS
+            // CONTAR ARTÍCULOS
             const [[countResult]] = await connection.query(
                 `
             SELECT COUNT(*) AS total
@@ -253,7 +253,7 @@ export class InventoryModel {
             const totalItems = countResult.total;
             const totalPages = Math.ceil(totalItems / limit);
 
-            // 2️⃣ OBTENER ARTÍCULOS (ORDEN POR CATEGORÍA)
+            // OBTENER ARTÍCULOS (ORDEN POR CATEGORÍA)
             const [items] = await connection.query(
                 `
             SELECT
@@ -287,7 +287,7 @@ export class InventoryModel {
                 [...params, limit, offset]
             );
 
-            // 3️⃣ RESPUESTA
+            // RESPUESTA
             return {
                 items,
                 totalItems,
@@ -537,6 +537,29 @@ export class InventoryModel {
                     });
                 }
             }
+
+            const seen = new Set();
+            const duplicatedInFile = [];
+
+            preparedArticles.forEach((item, index) => {
+                if (seen.has(item.no_inventario)) {
+                    duplicatedInFile.push({
+                        row: index + 2,
+                        no_inventario: item.no_inventario
+                    });
+                } else {
+                    seen.add(item.no_inventario);
+                }
+            });
+
+            if (duplicatedInFile.length > 0) {
+                const err = new Error("Registros duplicados dentro del archivo");
+                err.code = "DUPLICATE_IN_FILE";
+                err.duplicated = duplicatedInFile;
+                throw err;
+            }
+
+
             // Si hay errores, puedes devolverlos todos juntos
             if (errors.length > 0) {
                 const err = new Error(`Error. Inconsistencia de datos`)

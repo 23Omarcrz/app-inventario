@@ -14,9 +14,6 @@ export const authMiddleware = (req, res, next) => {
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-        // Esto le dice a Express:
-        // "Guarda la info del usuario autenticado en la request"
-        //req.user = decoded;
         req.session = decoded;
 
         next();

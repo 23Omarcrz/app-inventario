@@ -52,7 +52,7 @@ export class InventoryController {
     }
 
     getArticulos = async (req, res) => {
-        // 🔹 DATOS QUE MANDA EL FRONT (query params)
+        // DATOS QUE MANDA EL FRONT (query params)
         const {
             id_usuario,
             id_categoria,
@@ -62,7 +62,7 @@ export class InventoryController {
         } = req.query;
         const id_admin = req.session.id_admin;
 
-        // 🔸 Normalizar números
+        // Normalizar números
         const pageNumber = Number(page);
         const limitNumber = Number(limit);
 
@@ -92,11 +92,11 @@ export class InventoryController {
         }
 
         try {
-            // 🔹 LLAMADA AL MODELO
+            // LLAMADA AL MODELO
             const result = await this.inventoryModel.getArticulos({id_admin, id_usuario, id_categoria, page: pageNumber, limit: limitNumber, search: cleanSearch});
 
             //console.log(result.items);
-            // 🔹 RESPUESTA AL FRONT
+            // RESPUESTA AL FRONT
             return res.status(200).json({
                 success: true,
                 message: "Artículos encontrados",
@@ -155,7 +155,7 @@ export class InventoryController {
     }
 
     getAllArticulos = async (req, res) => {
-        // 🔹 DATOS QUE MANDA EL FRONT (query params)
+        // DATOS QUE MANDA EL FRONT (query params)
         const {
             id_usuario,
             page,
@@ -164,7 +164,7 @@ export class InventoryController {
         } = req.query;
         const id_admin = req.session.id_admin;
 
-        // 🔸 Normalizar números
+        // Normalizar números
         const pageNumber = Number(page);
         const limitNumber = Number(limit);
 
@@ -193,11 +193,11 @@ export class InventoryController {
         }
 
         try {
-            // 🔹 LLAMADA AL MODELO
+            // LLAMADA AL MODELO
             const result = await this.inventoryModel.getAllArticulos({ id_admin, id_usuario, page: pageNumber, limit: limitNumber, search: cleanSearch });
 
             //console.log(result.items);
-            // 🔹 RESPUESTA AL FRONT
+            // RESPUESTA AL FRONT
             return res.status(200).json({
                 success: true,
                 message: "Artículos encontrados",
@@ -537,6 +537,10 @@ export class InventoryController {
 
                 if(error.code === "ER_DUP_ENTRY") {
                     return res.status(409).json({ success: false, code: "DUPLICATE_RECORDS", message: "Registros duplicados", error: error.duplicated });    
+                }
+
+                if (error.code === "DUPLICATE_IN_FILE") {
+                    return res.status(409).json({ success: false, code: "DUPLICATE_IN_FILE", message: "Registros duplicados en el archivo", error: error.duplicated });
                 }
             }
 

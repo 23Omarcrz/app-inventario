@@ -12,7 +12,6 @@ export class AuthModel {
             connection = await getConnection();
 
             const [rows] = await connection.query(
-                //'SELECT * FROM Articulo WHERE usuario_id = ? AND categoria_id = ? LIMIT ?, ?;',[]
                 'SELECT * FROM Administrador WHERE username = ?;', [username]
             )
             if (rows.length === 0) {
@@ -21,13 +20,6 @@ export class AuthModel {
                 throw err;
             }
             const admin = rows[0];//esto es porque rows es un arreglo con el objeto
-            // Esto le dice a bcrypt:
-            // "Compara la contraseña enviada con el hash guardado"
-/*             if (!admin.password) {
-                const err = new Error("Usuario o contrasena incorrecta");
-                err.code = "INVALID_PASSWORD_DATA";
-                throw err;
-            } */
 
             const validPassword = await bcrypt.compare(password, admin.password);
 

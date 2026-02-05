@@ -204,20 +204,20 @@ export class AuthController {
         }
 
         try {
-            // 1️⃣ Buscar admin por email
+            // Buscar admin por email
             const admin = await this.authModel.findAdminByEmail(email);
 
-            // ⚠️ IMPORTANTE: responder igual aunque no exista
+            // responder igual aunque no exista
             if (!admin) {
                 return res.status(200).json({
                     message: "Se enviaron instrucciones a su correo electrónico"
                 });
             }
 
-            // 2️⃣ Generar token seguro
+            // Generar token seguro
             const token = crypto.randomBytes(32).toString("hex");
 
-            // 4️⃣ Guardar token
+            // Guardar token
             await this.authModel.saveResetToken(admin.id_admin, token);
 
             const resetURL = `${process.env.FRONT_URL}/reset-password/${token}`;
@@ -227,7 +227,7 @@ export class AuthController {
                 html: resetPasswordEmail(resetURL)
             });
 
-            // 5️⃣ RESPUESTA (correo lo vemos después)
+            // RESPUESTA (correo lo vemos después)
             return res.status(200).json({
                 message: "Se enviaron instrucciones a su correo electrónico"
             });
@@ -248,7 +248,7 @@ export class AuthController {
         }
 
         try {
-            // 1️⃣ Buscar usuario por token válido
+            // Buscar usuario por token válido
             const admin = await this.authModel.findUserByResetToken(token);
 
             if (!admin) {
